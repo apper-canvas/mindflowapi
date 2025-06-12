@@ -1,0 +1,37 @@
+[
+  {
+    "id": "1",
+    "timestamp": "2024-01-15T08:30:00.000Z",
+    "moodScore": 7,
+    "emotions": ["grateful", "calm"],
+    "notes": "Started the day with meditation and felt centered. Looking forward to the challenges ahead."
+  },
+  {
+    "id": "2",
+    "timestamp": "2024-01-14T19:45:00.000Z",
+    "moodScore": 5,
+    "emotions": ["tired", "anxious"],
+    "notes": "Long day at work. Feeling overwhelmed but trying to stay positive. Need some self-care time."
+  },
+  {
+    "id": "3",
+    "timestamp": "2024-01-13T12:15:00.000Z",
+    "moodScore": 8,
+    "emotions": ["happy", "excited"],
+    "notes": "Had a great morning workout and healthy breakfast. Energy levels are high and motivation is strong."
+  },
+  {
+    "id": "4",
+    "timestamp": "2024-01-12T16:20:00.000Z",
+    "moodScore": 4,
+    "emotions": ["sad", "lonely"],
+    "notes": "Missing family today. Sometimes the distance feels overwhelming, but grateful for technology to stay connected."
+  },
+  {
+    "id": "5",
+    "timestamp": "2024-01-11T09:00:00.000Z",
+    "moodScore": 6,
+    "emotions": ["calm", "hopeful"],
+    "notes": "New week, fresh start. Setting intentions for better self-care and mindfulness practices."
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "type": "meditation",
+    "title": "Morning Mindfulness",
+    "duration": 10,
+    "activities": ["breath awareness", "body scan", "loving kindness"],
+    "completedAt": "2024-01-15T08:45:00.000Z"
+  },
+  {
+    "id": "2",
+    "type": "breathing",
+    "title": "Stress Relief Breathing",
+    "duration": 5,
+    "activities": ["4-7-8 breathing", "progressive relaxation"],
+    "completedAt": "2024-01-14T14:30:00.000Z"
+  },
+  {
+    "id": "3",
+    "type": "meditation",
+    "title": "Evening Wind Down",
+    "duration": 15,
+    "activities": ["gratitude meditation", "sleep preparation", "gentle music"],
+    "completedAt": "2024-01-13T21:00:00.000Z"
+  },
+  {
+    "id": "4",
+    "type": "breathing",
+    "title": "Energy Boost",
+    "duration": 3,
+    "activities": ["energizing breath", "focus enhancement"],
+    "completedAt": "2024-01-12T15:15:00.000Z"
+  }
+]

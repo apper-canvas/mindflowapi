@@ -1,0 +1,30 @@
+[
+  {
+    "id": "1",
+    "prompt": "What am I grateful for today?",
+    "content": "Today I'm grateful for the quiet morning I had with my coffee, watching the sunrise. There's something magical about those first moments of the day when everything feels possible. I'm also thankful for my health and the ability to move my body. Sometimes we take these simple gifts for granted, but today I really felt appreciation for them.",
+    "moodId": "1",
+    "createdAt": "2024-01-15T09:00:00.000Z"
+  },
+  {
+    "id": "2",
+    "prompt": "How did I show kindness to myself or others?",
+    "content": "I took a break when I felt overwhelmed instead of pushing through. That felt like real self-compassion. I also called my friend who's been going through a tough time - just to listen and let them know they're not alone. Sometimes showing up is the greatest kindness we can offer.",
+    "moodId": "2",
+    "createdAt": "2024-01-14T20:00:00.000Z"
+  },
+  {
+    "id": "3",
+    "prompt": "What brought me joy or peace today?",
+    "content": "The workout this morning brought me so much joy! I felt strong and capable. There's something about moving my body that just shifts my entire mood and perspective. Also, the lunch break in the park was peaceful - just sitting on the bench, watching people go by, feeling connected to the world around me.",
+    "moodId": "3",
+    "createdAt": "2024-01-13T18:30:00.000Z"
+  },
+  {
+    "id": "4",
+    "prompt": "What emotions did I experience and what triggered them?",
+    "content": "I felt waves of sadness today, triggered by seeing photos from home on social media. It's interesting how images can transport us and bring up such strong feelings. The sadness wasn't necessarily bad - it reminded me of the love I have for the people and places that shaped me. It's okay to feel homesick sometimes.",
+    "moodId": "4",
+    "createdAt": "2024-01-12T17:00:00.000Z"
+  }
+]
