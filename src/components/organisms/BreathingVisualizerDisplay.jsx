@@ -71,8 +71,27 @@ const BreathingVisualizerDisplay = ({ session, onComplete, onBack }) => {
     return () => clearInterval(interval);
   }, [isActive, timeRemaining]); // Add timeRemaining to trigger effect when it hits 0
 
+const [timerActive, setTimerActive] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
+
   const toggleBreathing = () => {
-    setIsActive(!isActive);
+    if (timerActive) {
+      setTimerActive(false);
+      setIsActive(false);
+    } else {
+      setTimerActive(true);
+      setIsActive(true);
+    }
+  };
+
+  const stopBreathing = () => {
+    setTimerActive(false);
+    setIsActive(false);
+    setElapsedTime(0);
+  };
+
+  const resetTimer = () => {
+    setElapsedTime(0);
   };
 
   const formatTime = (seconds) => {
@@ -81,6 +100,25 @@ const BreathingVisualizerDisplay = ({ session, onComplete, onBack }) => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Timer effect
+  useEffect(() => {
+    let interval;
+    if (timerActive && isActive) {
+      interval = setInterval(() => {
+        setElapsedTime(prev => {
+          const newTime = prev + 1;
+          if (newTime >= session.duration * 60) {
+            setTimerActive(false);
+            setIsActive(false);
+            onComplete && onComplete();
+            return session.duration * 60;
+          }
+          return newTime;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timerActive, isActive, session.duration, onComplete]);
   const getCircleColor = () => {
     switch (currentPhase) {
       case 'inhale': return 'from-blue-400 to-blue-500';
@@ -197,20 +235,56 @@ const BreathingVisualizerDisplay = ({ session, onComplete, onBack }) => {
           </motion.div>
         </div>
 
+{/* Timer Display */}
+        <div className="text-center mb-6">
+          <div className="text-3xl font-bold text-gray-800 mb-2">
+            {formatTime(elapsedTime)}
+          </div>
+          <div className="text-sm text-gray-600">
+            {formatTime(session.duration * 60 - elapsedTime)} remaining
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+            <div 
+              className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-1000"
+              style={{ width: `${(elapsedTime / (session.duration * 60)) * 100}%` }}
+            />
+          </div>
+        </div>
+
         {/* Controls */}
-        <div className="flex justify-center mb-6">
+        <div className="flex justify-center items-center space-x-4 mb-6">
+          <Button
+            onClick={stopBreathing}
+            className="p-3 rounded-full bg-red-100 hover:bg-red-200 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <ApperIcon name="Square" size={20} />
+          </Button>
+
           <Button
             onClick={toggleBreathing}
             className={`px-8 py-4 rounded-full font-semibold shadow-lg transition-all duration-200 ${
-              isActive
-                ? 'bg-red-500 hover:bg-red-600 text-white'
+              timerActive && isActive
+                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
                 : 'bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl'
             }`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <div className="flex items-center space-x-2">
-              <ApperIcon name={isActive ? "Pause" : "Play"} size={20} />
-              <span>{isActive ? 'Pause' : 'Start Breathing'}</span>
+              <ApperIcon name={timerActive && isActive ? "Pause" : "Play"} size={20} />
+              <span>{timerActive && isActive ? 'Pause' : 'Start Breathing'}</span>
             </div>
+          </Button>
+
+          <Button
+            onClick={resetTimer}
+            className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <ApperIcon name="RotateCcw" size={20} />
           </Button>
         </div>
 

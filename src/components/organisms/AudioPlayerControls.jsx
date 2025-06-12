@@ -25,8 +25,33 @@ const AudioPlayerControls = ({ session, onComplete, onBack }) => {
     return () => clearInterval(interval);
   }, [isPlaying, currentTime, totalTime, onComplete]);
 
+const [timerActive, setTimerActive] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0);
+
   const togglePlayPause = () => {
     setIsPlaying(!isPlaying);
+  };
+
+  const startTimer = () => {
+    setTimerActive(true);
+    setIsPlaying(true);
+  };
+
+  const pauseTimer = () => {
+    setTimerActive(false);
+    setIsPlaying(false);
+  };
+
+  const stopTimer = () => {
+    setTimerActive(false);
+    setIsPlaying(false);
+    setElapsedTime(0);
+    setCurrentTime(0);
+  };
+
+  const resetTimer = () => {
+    setElapsedTime(0);
+    setCurrentTime(0);
   };
 
   const formatTime = (seconds) => {
@@ -35,6 +60,25 @@ const AudioPlayerControls = ({ session, onComplete, onBack }) => {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
+  // Timer effect
+  useEffect(() => {
+    let interval;
+    if (timerActive && isPlaying) {
+      interval = setInterval(() => {
+        setElapsedTime(prev => {
+          const newTime = prev + 1;
+          if (newTime >= session.duration * 60) {
+            setTimerActive(false);
+            setIsPlaying(false);
+            onComplete && onComplete();
+            return session.duration * 60;
+          }
+          return newTime;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [timerActive, isPlaying, session.duration, onComplete]);
   const progress = (currentTime / totalTime) * 100;
 
   return (
@@ -107,6 +151,53 @@ const AudioPlayerControls = ({ session, onComplete, onBack }) => {
         </div>
 
         {/* Controls */}
+{/* Timer Display */}
+        <div className="text-center mb-6">
+          <div className="text-4xl font-bold text-gray-800 mb-2">
+            {formatTime(elapsedTime)}
+          </div>
+          <div className="text-sm text-gray-600">
+            {formatTime(session.duration * 60 - elapsedTime)} remaining
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
+            <div 
+              className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full transition-all duration-1000"
+              style={{ width: `${(elapsedTime / (session.duration * 60)) * 100}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Timer Controls */}
+        <div className="flex items-center justify-center space-x-4 mb-6">
+          <Button
+            onClick={stopTimer}
+            className="p-3 rounded-full bg-red-100 hover:bg-red-200 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <ApperIcon name="Square" size={20} />
+          </Button>
+
+          <Button
+            onClick={timerActive ? pauseTimer : startTimer}
+            className="p-4 rounded-full bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transition-shadow"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ApperIcon name={timerActive && isPlaying ? "Pause" : "Play"} size={32} />
+          </Button>
+
+          <Button
+            onClick={resetTimer}
+            className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <ApperIcon name="RotateCcw" size={20} />
+          </Button>
+        </div>
+
+        {/* Audio Controls */}
         <div className="flex items-center justify-center space-x-6 mb-6">
           <Button
             onClick={() => setCurrentTime(Math.max(0, currentTime - 30))}
@@ -119,7 +210,7 @@ const AudioPlayerControls = ({ session, onComplete, onBack }) => {
 
           <Button
             onClick={togglePlayPause}
-            className="p-4 rounded-full bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transition-shadow"
+            className="p-4 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
