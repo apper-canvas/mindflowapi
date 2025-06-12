@@ -21,17 +21,20 @@ const MoodSlider = ({ moodScore, onScoreChange, getMoodEmoji, getMoodColor }) =>
             background: `linear-gradient(to right, #ef4444 0%, #f59e0b 50%, #10b981 100%)`
           }}
         />
-        <motion.div
+<motion.div
           key={moodScore}
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="absolute -top-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center"
-          style={{ left: `${((moodScore - 1) / 9) * 100}%` }}
+          className="absolute -top-14 flex flex-col items-center"
+          style={{ 
+            left: `${Math.max(8, Math.min(92, ((moodScore - 1) / 9) * 84 + 8))}%`,
+            transform: 'translateX(-50%)'
+          }}
         >
-          <div className={`text-2xl mb-1 p-2 rounded-full bg-gradient-to-r ${getMoodColor(moodScore)} text-white shadow-lg`}>
+          <div className={`text-2xl mb-2 p-2 rounded-full bg-gradient-to-r ${getMoodColor(moodScore)} text-white shadow-lg`}>
             {getMoodEmoji(moodScore)}
           </div>
-          <span className="text-sm font-medium text-gray-700">{moodScore}/10</span>
+          <span className="text-xs font-medium text-gray-700 bg-white px-2 py-1 rounded shadow-sm">{moodScore}/10</span>
         </motion.div>
       </div>
     </div>
