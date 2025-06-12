@@ -6,10 +6,10 @@ import MoodCheckInForm from '@/components/organisms/MoodCheckInForm';
 import SessionRecommendationSection from '@/components/organisms/SessionRecommendationSection';
 import AudioPlayerControls from '@/components/organisms/AudioPlayerControls';
 import BreathingVisualizerDisplay from '@/components/organisms/BreathingVisualizerDisplay';
+import Button from '@/components/atoms/Button';
 import Spinner from '@/components/atoms/Spinner';
 import * as moodService from '@/services/api/moodService';
 import * as sessionService from '@/services/api/sessionService';
-
 const HomePageFeatureManager = () => {
   const [activeFeature, setActiveFeature] = useState('checkin');
   const [currentSession, setCurrentSession] = useState(null);
