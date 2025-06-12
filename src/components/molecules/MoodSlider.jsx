@@ -19,7 +19,7 @@ const MoodSlider = ({ selectedMilestone, onMilestoneChange }) => {
         <span className="text-sm text-gray-500">Select your current state</span>
       </div>
 
-      <div className="space-y-3">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {milestones.map((milestone, index) => (
           <motion.button
             key={milestone.id}
