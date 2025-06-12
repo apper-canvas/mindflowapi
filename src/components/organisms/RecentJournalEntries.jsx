@@ -10,6 +10,11 @@ import ErrorState from '@/components/atoms/ErrorState';
 import * as journalService from '@/services/api/journalService';
 
 const RecentJournalEntries = ({ onStartWriting }) => {
+  // Validate onStartWriting prop
+  if (!onStartWriting || typeof onStartWriting !== 'function') {
+    console.error('RecentJournalEntries: onStartWriting prop is required and must be a function');
+    return null;
+  }
   const [entries, setEntries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -66,8 +71,14 @@ const RecentJournalEntries = ({ onStartWriting }) => {
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
-        <Button
-          onClick={() => onStartWriting(null)}
+<Button
+          onClick={() => {
+            try {
+              onStartWriting(null); // Consistent with JournalEditor's initialPrompt handling
+            } catch (error) {
+              console.error('Error starting new entry:', error);
+            }
+          }}
           className="w-full bg-gradient-to-r from-primary to-secondary text-white font-semibold py-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
         >
           <div className="flex items-center justify-center space-x-2">
@@ -81,11 +92,18 @@ const RecentJournalEntries = ({ onStartWriting }) => {
         <h2 className="text-lg font-semibold text-gray-800 mb-4">Quick Prompts</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {journalPrompts.slice(0, 4).map((prompt, index) => (
-            <JournalPromptCard
+<JournalPromptCard
               key={index}
               prompt={prompt}
               index={index}
-              onStartWriting={onStartWriting}
+              onStartWriting={(selectedPrompt) => {
+                try {
+                  // Ensure prompt string is passed consistently
+                  onStartWriting(selectedPrompt);
+                } catch (error) {
+                  console.error('Error starting writing with prompt:', error);
+                }
+              }}
             />
           ))}
         </div>

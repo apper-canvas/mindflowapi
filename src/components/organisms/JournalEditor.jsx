@@ -5,9 +5,11 @@ import ApperIcon from '@/components/ApperIcon';
 import Input from '@/components/atoms/Input';
 import Button from '@/components/atoms/Button';
 import * as moodService from '@/services/api/moodService';
+
 const JournalEditor = ({ onSave, onCancel, initialPrompt = null }) => {
   const [currentEntry, setCurrentEntry] = useState({ prompt: '', content: '' });
   const [selectedPrompt, setSelectedPrompt] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const journalPrompts = [
     "What am I grateful for today?",
@@ -21,24 +23,27 @@ const JournalEditor = ({ onSave, onCancel, initialPrompt = null }) => {
     "How did I practice mindfulness today?",
     "What do I want to focus on tomorrow?"
   ];
-useEffect(() => {
-    if (initialPrompt) {
-      // Use the provided prompt
+
+  useEffect(() => {
+    // Handle initialPrompt parameter consistently
+    if (initialPrompt && typeof initialPrompt === 'string') {
+      // Use the provided prompt string
       setSelectedPrompt(initialPrompt);
       setCurrentEntry({ prompt: initialPrompt, content: '' });
     } else {
-      // Generate an AI prompt when no specific prompt is provided
+      // Generate an AI prompt when no specific prompt is provided or initialPrompt is null
       setSelectedPrompt(null);
       generateAIPrompt();
     }
   }, [initialPrompt]);
-  const generateAIPrompt = async () => {
+const generateAIPrompt = async () => {
+    setLoading(true);
     try {
       const moods = await moodService.getAll();
-      const recentMood = moods[moods.length - 1];
+      const recentMood = moods?.[moods.length - 1];
 
       if (recentMood) {
-        const avgMood = recentMood.moodScore;
+        const avgMood = recentMood.moodScore || 5;
         const emotions = recentMood.emotions || [];
 
         let prompt;
@@ -62,9 +67,13 @@ useEffect(() => {
         setCurrentEntry({ prompt: randomPrompt, content: '' });
       }
     } catch (error) {
+      console.error('Error generating AI prompt:', error);
+      toast.error('Failed to generate personalized prompt, using random prompt');
       const randomPrompt = journalPrompts[Math.floor(Math.random() * journalPrompts.length)];
       setSelectedPrompt(randomPrompt);
       setCurrentEntry({ prompt: randomPrompt, content: '' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,82 +82,73 @@ useEffect(() => {
       toast.error('Please write something before saving');
       return;
     }
-    onSave(currentEntry);
+    
+    if (onSave && typeof onSave === 'function') {
+      onSave(currentEntry);
+    }
   };
+
+  const handleContentChange = (e) => {
+    setCurrentEntry(prev => ({
+      ...prev,
+      content: e.target.value
+    }));
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   return (
     <motion.div
-      key="writing"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      className="p-6"
+      className="p-6 max-w-4xl mx-auto"
     >
-      <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
-        <div className="flex items-center justify-between mb-6">
-          <Button
-            onClick={onCancel}
-            className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-          >
-            <ApperIcon name="ArrowLeft" size={20} />
-          </Button>
-          <h2 className="text-xl font-bold text-gray-800">Journal Entry</h2>
-          <Button
-            onClick={generateAIPrompt}
-            className="p-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-colors"
-          >
-            <ApperIcon name="RefreshCw" size={20} className="text-primary" />
-          </Button>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-xl p-4 mb-6"
-        >
-          <div className="flex items-start space-x-3">
-            <ApperIcon name="Lightbulb" className="text-accent mt-1" size={20} />
-            <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-gray-800 mb-1">Writing Prompt</h3>
-              <p className="text-gray-700 break-words">{currentEntry.prompt}</p>
+      <div className="bg-white rounded-2xl shadow-lg p-6">
+        <div className="mb-6">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Journal Entry</h2>
+          {selectedPrompt && (
+            <div className="bg-primary/10 p-4 rounded-lg mb-4">
+              <p className="text-primary font-medium">{selectedPrompt}</p>
             </div>
-          </div>
-        </motion.div>
+          )}
+        </div>
 
         <div className="mb-6">
           <Input
             as="textarea"
             value={currentEntry.content}
-            onChange={(e) => setCurrentEntry(prev => ({ ...prev, content: e.target.value }))}
+            onChange={handleContentChange}
             placeholder="Start writing your thoughts..."
-            className="w-full h-64 p-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary/20 focus:border-primary transition-colors resize-none"
-            autoFocus
+            className="w-full h-64 resize-none"
+            rows={10}
           />
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-sm text-gray-500">
-              {currentEntry.content.length} characters
-            </span>
-            <span className="text-xs text-gray-400">Auto-saving...</span>
-          </div>
         </div>
 
-        <div className="flex space-x-3">
-          <Button
-            onClick={handleSave}
-            className="flex-1 bg-gradient-to-r from-primary to-secondary text-white font-semibold py-3 rounded-xl hover:shadow-lg transition-shadow"
-          >
-            Save Entry
-          </Button>
+        <div className="flex gap-3 justify-end">
           <Button
             onClick={onCancel}
-            className="px-6 py-3 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors"
+            variant="outline"
+            className="px-6 py-2"
           >
             Cancel
+          </Button>
+          <Button
+            onClick={handleSave}
+            className="px-6 py-2 bg-primary text-white"
+            disabled={!currentEntry.content.trim()}
+          >
+            Save Entry
           </Button>
         </div>
       </div>
     </motion.div>
-  );
+);
 };
 
 export default JournalEditor;
