@@ -12,7 +12,7 @@ const StatCard = ({ emoji, value, label, delay = 0.3, className = '' }) => {
       >
         {emoji}
       </motion.div>
-      <div className="text-xl font-bold text-accent">{value}</div>
+<div className="text-xl font-bold text-white">{value}</div>
       <div className="text-xs text-gray-600">{label}</div>
     </div>
   );
