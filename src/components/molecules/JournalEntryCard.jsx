@@ -97,7 +97,7 @@ const JournalEntryCard = ({ entry, index }) => {
                 <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
                 <span className="ml-2 text-sm text-gray-500">Loading insights...</span>
               </div>
-            ) : analysis ? (
+) : analysis ? (
               <div className="space-y-4">
                 {/* Sentiment Analysis */}
                 <div className={`inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium ${getSentimentColor(analysis.sentiment)}`}>
@@ -128,6 +128,72 @@ const JournalEntryCard = ({ entry, index }) => {
                   </ul>
                 </div>
 
+                {/* Emotional Progression */}
+                {analysis.emotionalProgression && analysis.emotionalProgression.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+                      <ApperIcon name="TrendingUp" size={14} className="mr-1.5 text-purple-500" />
+                      Emotional Progression
+                    </h4>
+                    <ul className="space-y-1">
+                      {analysis.emotionalProgression.map((progression, idx) => (
+                        <li key={idx} className="text-xs text-gray-600 flex items-start">
+                          <span className="text-purple-500 mr-2">↗</span>
+                          {progression}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Writing Patterns */}
+                {analysis.writingPatterns && (
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+                      <ApperIcon name="FileText" size={14} className="mr-1.5 text-indigo-500" />
+                      Writing Patterns
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Complexity:</span>
+                        <span className="font-medium capitalize">{analysis.writingPatterns.complexity}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Emotional Range:</span>
+                        <span className="font-medium capitalize">{analysis.writingPatterns.emotionalRange}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Introspection:</span>
+                        <span className="font-medium capitalize">{analysis.writingPatterns.introspectionLevel}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Future Focus:</span>
+                        <span className="font-medium capitalize">{analysis.writingPatterns.futureOrientation}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Goal Indicators */}
+                {analysis.goalIndicators && analysis.goalIndicators.length > 0 && (
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+                      <ApperIcon name="Target" size={14} className="mr-1.5 text-orange-500" />
+                      Goal Indicators
+                    </h4>
+                    <div className="flex flex-wrap gap-1">
+                      {analysis.goalIndicators.map((goal, idx) => (
+                        <span 
+                          key={idx}
+                          className="inline-block px-2 py-1 bg-gradient-to-r from-orange-50 to-amber-50 text-xs text-orange-700 rounded-full border border-orange-100"
+                        >
+                          {goal}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
                 {/* Emotional Themes */}
                 {analysis.emotionalThemes.length > 0 && (
                   <div>
@@ -148,12 +214,48 @@ const JournalEntryCard = ({ entry, index }) => {
                   </div>
                 )}
 
+                {/* Psychological Metrics */}
+                {analysis.psychologicalMetrics && (
+                  <div>
+                    <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
+                      <ApperIcon name="Brain" size={14} className="mr-1.5 text-blue-500" />
+                      Psychological Insights
+                    </h4>
+                    <div className="space-y-1 text-xs">
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Growth Orientation:</span>
+                        <span className="font-medium">
+                          {Math.round(analysis.psychologicalMetrics.growthOrientation * 100)}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Self-Reflection:</span>
+                        <span className="font-medium">
+                          {Math.round(analysis.psychologicalMetrics.selfReflectionLevel * 100)}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Emotional Complexity:</span>
+                        <span className="font-medium">
+                          {Math.round(analysis.psychologicalMetrics.emotionalComplexity * 100)}%
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-500">Mindfulness Present:</span>
+                        <span className={`font-medium ${analysis.psychologicalMetrics.mindfulnessIndicator ? 'text-green-600' : 'text-gray-400'}`}>
+                          {analysis.psychologicalMetrics.mindfulnessIndicator ? 'Yes' : 'No'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Growth Suggestions */}
                 {analysis.suggestions.length > 0 && (
                   <div>
                     <h4 className="text-sm font-semibold text-gray-800 mb-2 flex items-center">
-                      <ApperIcon name="TrendingUp" size={14} className="mr-1.5 text-green-500" />
-                      Growth Suggestions
+                      <ApperIcon name="Compass" size={14} className="mr-1.5 text-green-500" />
+                      Personalized Recommendations
                     </h4>
                     <ul className="space-y-1">
                       {analysis.suggestions.map((suggestion, idx) => (
