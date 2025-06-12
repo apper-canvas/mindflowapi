@@ -5,8 +5,7 @@ import ApperIcon from '@/components/ApperIcon';
 import Input from '@/components/atoms/Input';
 import Button from '@/components/atoms/Button';
 import * as moodService from '@/services/api/moodService';
-
-const JournalEditor = ({ onSave, onCancel }) => {
+const JournalEditor = ({ onSave, onCancel, initialPrompt = null }) => {
   const [currentEntry, setCurrentEntry] = useState({ prompt: '', content: '' });
   const [selectedPrompt, setSelectedPrompt] = useState(null);
 
@@ -22,12 +21,17 @@ const JournalEditor = ({ onSave, onCancel }) => {
     "How did I practice mindfulness today?",
     "What do I want to focus on tomorrow?"
   ];
-
-  useEffect(() => {
-    // Generate an initial prompt when the editor mounts
-    generateAIPrompt();
-  }, []);
-
+useEffect(() => {
+    if (initialPrompt) {
+      // Use the provided prompt
+      setSelectedPrompt(initialPrompt);
+      setCurrentEntry({ prompt: initialPrompt, content: '' });
+    } else {
+      // Generate an AI prompt when no specific prompt is provided
+      setSelectedPrompt(null);
+      generateAIPrompt();
+    }
+  }, [initialPrompt]);
   const generateAIPrompt = async () => {
     try {
       const moods = await moodService.getAll();

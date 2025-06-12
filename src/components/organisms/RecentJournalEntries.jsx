@@ -61,13 +61,13 @@ const RecentJournalEntries = ({ onStartWriting }) => {
       exit={{ opacity: 0 }}
       className="p-6"
     >
-      <motion.div
+<motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         className="mb-8"
       >
         <Button
-          onClick={() => onStartWriting()}
+          onClick={() => onStartWriting(null)}
           className="w-full bg-gradient-to-r from-primary to-secondary text-white font-semibold py-4 rounded-2xl shadow-lg hover:shadow-xl transition-shadow"
         >
           <div className="flex items-center justify-center space-x-2">
