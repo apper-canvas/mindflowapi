@@ -25,7 +25,7 @@ const MoodSlider = ({ moodScore, onScoreChange, getMoodEmoji, getMoodColor }) =>
           key={moodScore}
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
-          className="absolute -top-14 flex flex-col items-center"
+          className="absolute -bottom-16 flex flex-col items-center"
           style={{ 
             left: `${Math.max(8, Math.min(92, ((moodScore - 1) / 9) * 84 + 8))}%`,
             transform: 'translateX(-50%)'
