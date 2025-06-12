@@ -72,8 +72,8 @@ className="bg-gradient-to-br from-primary/5 via-white to-secondary/5 rounded-2xl
         onMilestoneChange={setSelectedMilestone}
       />
         <div className="mb-8">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">What emotions are you experiencing?</h3>
-          <div className="grid grid-cols-4 gap-3">
+<h3 className="text-lg font-semibold text-gray-800 mb-4">What emotions are you experiencing?</h3>
+          <div className="grid grid-cols-2 gap-3">
             {emotions.map((emotion, index) => (
               <EmotionButton
                 key={emotion.id}
