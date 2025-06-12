@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const StatCard = ({ emoji, value, label, delay = 0.3, className = '' }) => {
   return (
-    <div className={`bg-gray-50 rounded-2xl p-4 text-center shadow-sm border border-gray-100 ${className}`}>
+<div className={`bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl p-4 text-center shadow-sm border border-purple-200 ${className}`}>
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
