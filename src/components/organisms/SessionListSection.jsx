@@ -32,14 +32,14 @@ const SessionListSection = ({ onSessionStart }) => {
     }
   };
 
-  const quickSessions = [
+const quickSessions = [
     {
       id: 'quick-breathing',
       type: 'breathing',
       title: '3-Minute Breathing',
       description: 'Quick stress relief with focused breathing',
       duration: 3,
-      activities: ['box breathing', 'relaxation'],
+      activities: ['inhale for 4 counts', 'hold for 4 counts', 'exhale for 4 counts', 'hold for 4 counts'],
       icon: 'Wind',
       color: 'from-blue-400 to-blue-500'
     },
@@ -59,7 +59,7 @@ const SessionListSection = ({ onSessionStart }) => {
       title: 'Energy Boost',
       description: 'Revitalizing breathing to increase alertness',
       duration: 4,
-      activities: ['energizing breath', 'focus enhancement'],
+      activities: ['inhale for 3 counts', 'exhale for 2 counts', 'rapid energizing breath', 'focus enhancement'],
       icon: 'Zap',
       color: 'from-orange-400 to-orange-500'
     },
