@@ -8,11 +8,11 @@ const JournalEntryCard = ({ entry, index }) => {
   const [analysis, setAnalysis] = useState(null);
   const [loadingAnalysis, setLoadingAnalysis] = useState(false);
 
-  useEffect(() => {
-    if (isExpanded && !analysis && entry.id) {
+useEffect(() => {
+    if (!analysis && entry.id && entry.content && entry.content.trim().length > 0) {
       loadAnalysis();
     }
-  }, [isExpanded, entry.id]);
+  }, [entry.id, entry.content]);
 
   const loadAnalysis = async () => {
     setLoadingAnalysis(true);
