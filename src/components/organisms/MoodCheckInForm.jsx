@@ -7,7 +7,7 @@ import Button from '@/components/atoms/Button';
 import PageHeader from '@/components/molecules/PageHeader';
 
 const MoodCheckInForm = ({ onSubmit }) => {
-  const [moodScore, setMoodScore] = useState(5);
+const [selectedMilestone, setSelectedMilestone] = useState('ok');
   const [selectedEmotions, setSelectedEmotions] = useState([]);
   const [notes, setNotes] = useState('');
 
@@ -30,11 +30,11 @@ const MoodCheckInForm = ({ onSubmit }) => {
     );
   };
 
-  const handleSubmit = () => {
+const handleSubmit = () => {
     const moodData = {
       id: Date.now().toString(),
       timestamp: new Date().toISOString(),
-      moodScore,
+      milestone: selectedMilestone,
       emotions: selectedEmotions,
       notes
     };
@@ -54,7 +54,6 @@ const MoodCheckInForm = ({ onSubmit }) => {
     if (score <= 8) return '🙂';
     return '😊';
   };
-
   return (
     <div className="p-6 max-w-full overflow-hidden">
       <motion.div
@@ -66,15 +65,12 @@ const MoodCheckInForm = ({ onSubmit }) => {
           emoji="🌸"
           title="How are you feeling today?"
           subtitle="Take a moment to check in with yourself"
-        />
+/>
 
-        <MoodSlider
-          moodScore={moodScore}
-          onScoreChange={setMoodScore}
-          getMoodEmoji={getMoodEmoji}
-          getMoodColor={getMoodColor}
-        />
-
+      <MoodSlider
+        selectedMilestone={selectedMilestone}
+        onMilestoneChange={setSelectedMilestone}
+      />
         <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">What emotions are you experiencing?</h3>
           <div className="grid grid-cols-4 gap-3">
