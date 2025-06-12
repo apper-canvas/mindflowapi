@@ -4,13 +4,21 @@ import MoodSlider from '@/components/molecules/MoodSlider';
 import Input from '@/components/atoms/Input';
 import Button from '@/components/atoms/Button';
 import PageHeader from '@/components/molecules/PageHeader';
+import EmotionButton from '@/components/molecules/EmotionButton';
 const MoodCheckInForm = ({ onSubmit }) => {
 const [selectedMilestone, setSelectedMilestone] = useState('ok');
 const [selectedEmotion, setSelectedEmotion] = useState('');
   const [notes, setNotes] = useState('');
 
 const emotions = [
-    'Happy', 'Sad', 'Anxious', 'Angry', 'Calm', 'Excited', 'Tired', 'Grateful'
+    { id: 'happy', label: 'Happy', icon: 'smile', color: 'text-yellow-500' },
+    { id: 'sad', label: 'Sad', icon: 'frown', color: 'text-blue-500' },
+    { id: 'anxious', label: 'Anxious', icon: 'zap', color: 'text-orange-500' },
+    { id: 'angry', label: 'Angry', icon: 'flame', color: 'text-red-500' },
+    { id: 'calm', label: 'Calm', icon: 'leaf', color: 'text-green-500' },
+    { id: 'excited', label: 'Excited', icon: 'star', color: 'text-purple-500' },
+    { id: 'tired', label: 'Tired', icon: 'moon', color: 'text-indigo-500' },
+    { id: 'grateful', label: 'Grateful', icon: 'heart', color: 'text-pink-500' }
   ];
 
 const handleEmotionSelect = (emotion) => {
@@ -60,19 +68,15 @@ className="bg-gradient-to-br from-primary/5 via-white to-secondary/5 rounded-2xl
       />
 <div className="mb-8">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">What emotions are you experiencing?</h3>
-          <div className="flex flex-wrap gap-2">
-            {emotions.map((emotion) => (
-              <button
-                key={emotion}
-                onClick={() => handleEmotionSelect(emotion)}
-                className={`px-4 py-2 rounded-lg border transition-colors ${
-                  selectedEmotion === emotion
-                    ? 'bg-blue-500 text-white border-blue-500'
-                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-300'
-                }`}
-              >
-                {emotion}
-              </button>
+          <div className="grid grid-cols-4 gap-3">
+            {emotions.map((emotion, index) => (
+              <EmotionButton
+                key={emotion.id}
+                emotion={emotion}
+                isSelected={selectedEmotion === emotion.id}
+                onClick={() => handleEmotionSelect(emotion.id)}
+                delay={index * 0.1}
+              />
             ))}
           </div>
         </div>
