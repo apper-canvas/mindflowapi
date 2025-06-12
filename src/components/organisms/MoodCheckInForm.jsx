@@ -1,33 +1,20 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import MoodSlider from '@/components/molecules/MoodSlider';
-import EmotionButton from '@/components/molecules/EmotionButton';
 import Input from '@/components/atoms/Input';
 import Button from '@/components/atoms/Button';
 import PageHeader from '@/components/molecules/PageHeader';
-
 const MoodCheckInForm = ({ onSubmit }) => {
 const [selectedMilestone, setSelectedMilestone] = useState('ok');
-  const [selectedEmotions, setSelectedEmotions] = useState([]);
+const [selectedEmotion, setSelectedEmotion] = useState('');
   const [notes, setNotes] = useState('');
 
-  const emotions = [
-    { id: 'happy', label: 'Happy', icon: 'Smile', color: 'text-green-500' },
-    { id: 'sad', label: 'Sad', icon: 'Frown', color: 'text-blue-500' },
-    { id: 'anxious', label: 'Anxious', icon: 'Zap', color: 'text-yellow-500' },
-    { id: 'angry', label: 'Angry', icon: 'Flame', color: 'text-red-500' },
-    { id: 'calm', label: 'Calm', icon: 'Waves', color: 'text-blue-400' },
-    { id: 'excited', label: 'Excited', icon: 'Star', color: 'text-purple-500' },
-    { id: 'tired', label: 'Tired', icon: 'Moon', color: 'text-gray-500' },
-    { id: 'grateful', label: 'Grateful', icon: 'Heart', color: 'text-pink-500' }
+const emotions = [
+    'Happy', 'Sad', 'Anxious', 'Angry', 'Calm', 'Excited', 'Tired', 'Grateful'
   ];
 
-  const handleEmotionToggle = (emotionId) => {
-    setSelectedEmotions(prev =>
-      prev.includes(emotionId)
-        ? prev.filter(id => id !== emotionId)
-        : [...prev, emotionId]
-    );
+const handleEmotionSelect = (emotion) => {
+    setSelectedEmotion(emotion);
   };
 
 const handleSubmit = () => {
@@ -35,7 +22,7 @@ const handleSubmit = () => {
       id: Date.now().toString(),
       timestamp: new Date().toISOString(),
       milestone: selectedMilestone,
-      emotions: selectedEmotions,
+      emotions: selectedEmotion,
       notes
     };
     onSubmit(moodData);
@@ -71,17 +58,21 @@ className="bg-gradient-to-br from-primary/5 via-white to-secondary/5 rounded-2xl
         selectedMilestone={selectedMilestone}
         onMilestoneChange={setSelectedMilestone}
       />
-        <div className="mb-8">
-<h3 className="text-lg font-semibold text-gray-800 mb-4">What emotions are you experiencing?</h3>
-          <div className="grid grid-cols-2 gap-3">
-            {emotions.map((emotion, index) => (
-              <EmotionButton
-                key={emotion.id}
-                emotion={emotion}
-                isSelected={selectedEmotions.includes(emotion.id)}
-                onClick={() => handleEmotionToggle(emotion.id)}
-                delay={index * 0.05}
-              />
+<div className="mb-8">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">What emotions are you experiencing?</h3>
+          <div className="flex flex-wrap gap-2">
+            {emotions.map((emotion) => (
+              <button
+                key={emotion}
+                onClick={() => handleEmotionSelect(emotion)}
+                className={`px-4 py-2 rounded-lg border transition-colors ${
+                  selectedEmotion === emotion
+                    ? 'bg-blue-500 text-white border-blue-500'
+                    : 'bg-white text-gray-700 border-gray-300 hover:border-blue-300'
+                }`}
+              >
+                {emotion}
+              </button>
             ))}
           </div>
         </div>
