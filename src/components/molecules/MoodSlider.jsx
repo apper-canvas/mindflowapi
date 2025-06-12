@@ -27,7 +27,7 @@ const MoodSlider = ({ selectedMilestone, onMilestoneChange }) => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
             onClick={() => onMilestoneChange(milestone.id)}
-            className={`w-full p-4 rounded-xl border-2 transition-all duration-200 text-left ${
+className={`w-full p-3 rounded-xl border-2 transition-all duration-200 text-left ${
               selectedMilestone === milestone.id
                 ? 'border-blue-500 bg-blue-50 shadow-md'
                 : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm'
@@ -38,9 +38,9 @@ const MoodSlider = ({ selectedMilestone, onMilestoneChange }) => {
                 <div className={`text-2xl p-2 rounded-full bg-gradient-to-r ${milestone.color} text-white shadow-sm`}>
                   {milestone.emoji}
                 </div>
-                <div>
-                  <h4 className="font-semibold text-gray-800">{milestone.label}</h4>
-                  <p className="text-sm text-gray-600">{milestone.description}</p>
+<div>
+                  <h4 className="font-semibold text-gray-800 leading-tight">{milestone.label}</h4>
+                  <p className="text-sm text-gray-600 leading-tight">{milestone.description}</p>
                 </div>
               </div>
               {selectedMilestone === milestone.id && (

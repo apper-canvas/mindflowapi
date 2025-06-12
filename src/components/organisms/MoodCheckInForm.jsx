@@ -55,11 +55,11 @@ const handleSubmit = () => {
     return '😊';
   };
   return (
-    <div className="p-6 max-w-full overflow-hidden">
+<div className="p-4 max-w-full overflow-hidden">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-primary/5 via-white to-secondary/5 rounded-2xl p-6 shadow-lg border border-gray-100"
+className="bg-gradient-to-br from-primary/5 via-white to-secondary/5 rounded-2xl p-4 shadow-lg border border-gray-100"
       >
         <PageHeader
           emoji="🌸"
