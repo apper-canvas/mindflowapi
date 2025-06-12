@@ -1,11 +1,11 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import Layout from './Layout';
-import Home from './pages/Home';
-import Sessions from './pages/Sessions';
-import Journal from './pages/Journal';
-import Progress from './pages/Progress';
-import NotFound from './pages/NotFound';
+import Layout from '@/Layout';
+import HomePage from '@/components/pages/HomePage';
+import SessionsPage from '@/components/pages/SessionsPage';
+import JournalPage from '@/components/pages/JournalPage';
+import ProgressPage from '@/components/pages/ProgressPage';
+import NotFoundPage from '@/components/pages/NotFoundPage';
 
 function App() {
   return (
@@ -13,11 +13,11 @@ function App() {
       <div className="h-screen bg-white overflow-hidden">
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Home />} />
-            <Route path="sessions" element={<Sessions />} />
-            <Route path="journal" element={<Journal />} />
-            <Route path="progress" element={<Progress />} />
-            <Route path="*" element={<NotFound />} />
+<Route index element={<HomePage />} />
+            <Route path="sessions" element={<SessionsPage />} />
+            <Route path="journal" element={<JournalPage />} />
+            <Route path="progress" element={<ProgressPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Route>
         </Routes>
         

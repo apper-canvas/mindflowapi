@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
-const SessionRecommendation = ({ onSessionStart, recentMoods = [] }) => {
+const SessionRecommendationSection = ({ onSessionStart, recentMoods = [] }) => {
   const [recommendedSession, setRecommendedSession] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -12,11 +13,11 @@ const SessionRecommendation = ({ onSessionStart, recentMoods = [] }) => {
 
   const generateRecommendation = () => {
     setLoading(true);
-    
+
     // AI-like session generation based on mood patterns
     setTimeout(() => {
-      const avgMood = recentMoods.length > 0 
-        ? recentMoods.reduce((sum, mood) => sum + mood.moodScore, 0) / recentMoods.length 
+      const avgMood = recentMoods.length > 0
+        ? recentMoods.reduce((sum, mood) => sum + mood.moodScore, 0) / recentMoods.length
         : 5;
 
       const hasAnxiety = recentMoods.some(mood => mood.emotions?.includes('anxious'));
@@ -176,22 +177,20 @@ const SessionRecommendation = ({ onSessionStart, recentMoods = [] }) => {
 
           {/* Action Buttons */}
           <div className="flex space-x-3">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <Button
               onClick={() => onSessionStart(recommendedSession)}
               className="flex-1 bg-white text-gray-800 font-semibold py-3 rounded-xl hover:bg-gray-50 transition-colors"
             >
               Start Session
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+            </Button>
+            <Button
               onClick={generateRecommendation}
               className="px-4 bg-white/20 rounded-xl hover:bg-white/30 transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <ApperIcon name="RefreshCw" size={20} />
-            </motion.button>
+            </Button>
           </div>
         </motion.div>
 
@@ -199,9 +198,7 @@ const SessionRecommendation = ({ onSessionStart, recentMoods = [] }) => {
         <div>
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Quick Options</h3>
           <div className="grid grid-cols-2 gap-4">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <Button
               onClick={() => onSessionStart({
                 id: 'quick-breathing',
                 type: 'breathing',
@@ -215,11 +212,9 @@ const SessionRecommendation = ({ onSessionStart, recentMoods = [] }) => {
               <ApperIcon name="Wind" className="text-blue-600 mb-2" size={20} />
               <h4 className="font-semibold text-gray-800">Quick Breathing</h4>
               <p className="text-sm text-gray-600">3 minutes</p>
-            </motion.button>
+            </Button>
 
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <Button
               onClick={() => onSessionStart({
                 id: 'mini-meditation',
                 type: 'meditation',
@@ -233,7 +228,7 @@ const SessionRecommendation = ({ onSessionStart, recentMoods = [] }) => {
               <ApperIcon name="Brain" className="text-purple-600 mb-2" size={20} />
               <h4 className="font-semibold text-gray-800">Mini Meditation</h4>
               <p className="text-sm text-gray-600">5 minutes</p>
-            </motion.button>
+            </Button>
           </div>
         </div>
       </motion.div>
@@ -241,4 +236,4 @@ const SessionRecommendation = ({ onSessionStart, recentMoods = [] }) => {
   );
 };
 
-export default SessionRecommendation;
+export default SessionRecommendationSection;

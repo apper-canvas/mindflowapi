@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
-const AudioPlayer = ({ session, onComplete, onBack }) => {
+const AudioPlayerControls = ({ session, onComplete, onBack }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [totalTime] = useState(session.duration * 60); // Convert minutes to seconds
@@ -45,14 +46,14 @@ const AudioPlayer = ({ session, onComplete, onBack }) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <Button
             onClick={onBack}
             className="p-2 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <ApperIcon name="ArrowLeft" size={20} />
-          </motion.button>
+          </Button>
           <div className="text-center flex-1 min-w-0">
             <h2 className="text-xl font-bold text-gray-800 break-words">{session.title}</h2>
             <p className="text-sm text-gray-600">{session.duration} minute session</p>
@@ -63,11 +64,11 @@ const AudioPlayer = ({ session, onComplete, onBack }) => {
         {/* Session Visual */}
         <div className="text-center mb-8">
           <motion.div
-            animate={{ 
+            animate={{
               scale: isPlaying ? [1, 1.05, 1] : 1,
               rotate: isPlaying ? 360 : 0
             }}
-            transition={{ 
+            transition={{
               scale: { repeat: Infinity, duration: 2 },
               rotate: { duration: 20, repeat: Infinity, ease: "linear" }
             }}
@@ -75,7 +76,7 @@ const AudioPlayer = ({ session, onComplete, onBack }) => {
           >
             <ApperIcon name="Headphones" size={48} className="text-white" />
           </motion.div>
-          
+
           {/* Current Activity */}
           <motion.div
             key={Math.floor(currentTime / 30)} // Change every 30 seconds
@@ -107,32 +108,32 @@ const AudioPlayer = ({ session, onComplete, onBack }) => {
 
         {/* Controls */}
         <div className="flex items-center justify-center space-x-6 mb-6">
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+          <Button
             onClick={() => setCurrentTime(Math.max(0, currentTime - 30))}
             className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
-          >
-            <ApperIcon name="RotateCcw" size={20} />
-          </motion.button>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={togglePlayPause}
-            className="p-4 rounded-full bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transition-shadow"
-          >
-            <ApperIcon name={isPlaying ? "Pause" : "Play"} size={32} />
-          </motion.button>
-
-          <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
+          >
+            <ApperIcon name="RotateCcw" size={20} />
+          </Button>
+
+          <Button
+            onClick={togglePlayPause}
+            className="p-4 rounded-full bg-gradient-to-r from-primary to-secondary text-white shadow-lg hover:shadow-xl transition-shadow"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <ApperIcon name={isPlaying ? "Pause" : "Play"} size={32} />
+          </Button>
+
+          <Button
             onClick={() => setCurrentTime(Math.min(totalTime, currentTime + 30))}
             className="p-3 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
           >
             <ApperIcon name="RotateCw" size={20} />
-          </motion.button>
+          </Button>
         </div>
 
         {/* Session Info */}
@@ -143,20 +144,20 @@ const AudioPlayer = ({ session, onComplete, onBack }) => {
               <motion.div
                 key={index}
                 initial={{ opacity: 0.5 }}
-                animate={{ 
+                animate={{
                   opacity: Math.floor((currentTime / totalTime) * session.activities.length) === index ? 1 : 0.5,
                   scale: Math.floor((currentTime / totalTime) * session.activities.length) === index ? 1.02 : 1
                 }}
                 className="flex items-center space-x-2"
               >
                 <div className={`w-2 h-2 rounded-full ${
-                  Math.floor((currentTime / totalTime) * session.activities.length) === index 
-                    ? 'bg-primary' 
+                  Math.floor((currentTime / totalTime) * session.activities.length) === index
+                    ? 'bg-primary'
                     : 'bg-gray-300'
                 }`} />
                 <span className={`text-sm capitalize break-words ${
-                  Math.floor((currentTime / totalTime) * session.activities.length) === index 
-                    ? 'text-primary font-medium' 
+                  Math.floor((currentTime / totalTime) * session.activities.length) === index
+                    ? 'text-primary font-medium'
                     : 'text-gray-600'
                 }`}>
                   {activity}
@@ -173,9 +174,7 @@ const AudioPlayer = ({ session, onComplete, onBack }) => {
             animate={{ opacity: 1, y: 0 }}
             className="mt-6"
           >
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <Button
               onClick={onComplete}
               className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
             >
@@ -183,7 +182,7 @@ const AudioPlayer = ({ session, onComplete, onBack }) => {
                 <ApperIcon name="CheckCircle" size={20} />
                 <span>Session Complete!</span>
               </div>
-            </motion.button>
+            </Button>
           </motion.div>
         )}
       </motion.div>
@@ -191,4 +190,4 @@ const AudioPlayer = ({ session, onComplete, onBack }) => {
   );
 };
 
-export default AudioPlayer;
+export default AudioPlayerControls;

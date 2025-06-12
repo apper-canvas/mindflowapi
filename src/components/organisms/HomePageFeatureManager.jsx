@@ -1,15 +1,16 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
-import ApperIcon from './ApperIcon';
-import MoodCheckIn from './MoodCheckIn';
-import SessionRecommendation from './SessionRecommendation';
-import AudioPlayer from './AudioPlayer';
-import BreathingVisualizer from './BreathingVisualizer';
-import * as moodService from '../services/api/moodService';
-import * as sessionService from '../services/api/sessionService';
+import ApperIcon from '@/components/ApperIcon';
+import MoodCheckInForm from '@/components/organisms/MoodCheckInForm';
+import SessionRecommendationSection from '@/components/organisms/SessionRecommendationSection';
+import AudioPlayerControls from '@/components/organisms/AudioPlayerControls';
+import BreathingVisualizerDisplay from '@/components/organisms/BreathingVisualizerDisplay';
+import Spinner from '@/components/atoms/Spinner';
+import * as moodService from '@/services/api/moodService';
+import * as sessionService from '@/services/api/sessionService';
 
-const MainFeature = () => {
+const HomePageFeatureManager = () => {
   const [activeFeature, setActiveFeature] = useState('checkin');
   const [currentSession, setCurrentSession] = useState(null);
   const [sessionData, setSessionData] = useState([]);
@@ -72,25 +73,7 @@ const MainFeature = () => {
   };
 
   if (loading) {
-    return (
-      <div className="p-6 space-y-6">
-        {[...Array(3)].map((_, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1 }}
-            className="bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl p-6 shadow-md"
-          >
-            <div className="animate-pulse space-y-4">
-              <div className="h-6 bg-gray-200 rounded w-3/4"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-              <div className="h-20 bg-gray-200 rounded"></div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    );
+    return <Spinner />;
   }
 
   return (
@@ -104,7 +87,7 @@ const MainFeature = () => {
             exit={{ opacity: 0, scale: 1.05 }}
             transition={{ duration: 0.3 }}
           >
-            <MoodCheckIn onSubmit={handleMoodSubmit} />
+            <MoodCheckInForm onSubmit={handleMoodSubmit} />
           </motion.div>
         )}
 
@@ -116,7 +99,7 @@ const MainFeature = () => {
             exit={{ opacity: 0, x: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <SessionRecommendation 
+            <SessionRecommendationSection
               onSessionStart={handleSessionStart}
               recentMoods={moodData.slice(-3)}
             />
@@ -131,7 +114,7 @@ const MainFeature = () => {
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
           >
-            <AudioPlayer 
+            <AudioPlayerControls
               session={currentSession}
               onComplete={handleSessionComplete}
               onBack={() => setActiveFeature('recommendation')}
@@ -147,7 +130,7 @@ const MainFeature = () => {
             exit={{ opacity: 0, scale: 1.1 }}
             transition={{ duration: 0.3 }}
           >
-            <BreathingVisualizer 
+            <BreathingVisualizerDisplay
               session={currentSession}
               onComplete={handleSessionComplete}
               onBack={() => setActiveFeature('recommendation')}
@@ -157,23 +140,23 @@ const MainFeature = () => {
       </AnimatePresence>
 
       {/* Quick Access Navigation */}
-      <motion.div 
+      <motion.div
         className="fixed bottom-20 right-6 z-30"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 0.5 }}
       >
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+        <Button
           onClick={() => setActiveFeature('checkin')}
           className="bg-gradient-to-r from-primary to-secondary text-white rounded-full p-4 shadow-lg"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.9 }}
         >
           <ApperIcon name="Heart" size={24} />
-        </motion.button>
+        </Button>
       </motion.div>
     </div>
   );
 };
 
-export default MainFeature;
+export default HomePageFeatureManager;

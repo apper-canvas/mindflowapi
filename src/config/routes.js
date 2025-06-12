@@ -1,7 +1,7 @@
-import Home from '../pages/Home';
-import Sessions from '../pages/Sessions';
-import Journal from '../pages/Journal';
-import Progress from '../pages/Progress';
+import HomePage from '@/components/pages/HomePage';
+import SessionsPage from '@/components/pages/SessionsPage';
+import JournalPage from '@/components/pages/JournalPage';
+import ProgressPage from '@/components/pages/ProgressPage';
 
 export const routes = {
   home: {
@@ -9,28 +9,28 @@ export const routes = {
     label: 'Home',
     path: '/',
     icon: 'Home',
-    component: Home
+component: HomePage
   },
   sessions: {
     id: 'sessions',
     label: 'Sessions',
     path: '/sessions',
     icon: 'Play',
-    component: Sessions
+component: SessionsPage
   },
   journal: {
     id: 'journal',
     label: 'Journal',
     path: '/journal',
     icon: 'BookOpen',
-    component: Journal
+component: JournalPage
   },
   progress: {
     id: 'progress',
     label: 'Progress',
     path: '/progress',
     icon: 'TrendingUp',
-    component: Progress
+component: ProgressPage
   }
 };
 

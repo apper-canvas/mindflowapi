@@ -1,13 +1,14 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
-const BreathingVisualizer = ({ session, onComplete, onBack }) => {
+const BreathingVisualizerDisplay = ({ session, onComplete, onBack }) => {
   const [isActive, setIsActive] = useState(false);
   const [currentPhase, setCurrentPhase] = useState('inhale'); // inhale, hold, exhale, hold
   const [cycleCount, setCycleCount] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(session.duration * 60);
-  
+
   // 4-7-8 breathing pattern: inhale for 4, hold for 7, exhale for 8
   const breathingPattern = {
     inhale: 4,
@@ -43,13 +44,16 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
   useEffect(() => {
     if (!isActive) return;
 
-    const cycleDuration = Object.values(breathingPattern).reduce((sum, duration) => sum + duration, 0) * 1000;
     const phases = Object.keys(breathingPattern);
-    
+
     let phaseIndex = 0;
     let phaseStartTime = Date.now();
 
     const updatePhase = () => {
+      if (timeRemaining <= 0) {
+        clearInterval(interval);
+        return;
+      }
       const elapsed = Date.now() - phaseStartTime;
       const currentPhaseDuration = breathingPattern[phases[phaseIndex]] * 1000;
 
@@ -65,7 +69,7 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
 
     const interval = setInterval(updatePhase, 100);
     return () => clearInterval(interval);
-  }, [isActive]);
+  }, [isActive, timeRemaining]); // Add timeRemaining to trigger effect when it hits 0
 
   const toggleBreathing = () => {
     setIsActive(!isActive);
@@ -75,16 +79,6 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const getCircleSize = () => {
-    switch (currentPhase) {
-      case 'inhale': return 'scale-110';
-      case 'hold1': return 'scale-110';
-      case 'exhale': return 'scale-75';
-      case 'hold2': return 'scale-75';
-      default: return 'scale-100';
-    }
   };
 
   const getCircleColor = () => {
@@ -106,14 +100,14 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
       >
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <Button
             onClick={onBack}
             className="p-2 rounded-full bg-white/60 hover:bg-white/80 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             <ApperIcon name="ArrowLeft" size={20} />
-          </motion.button>
+          </Button>
           <div className="text-center flex-1 min-w-0">
             <h2 className="text-xl font-bold text-gray-800 break-words">{session.title}</h2>
             <p className="text-sm text-gray-600">{formatTime(timeRemaining)} remaining</p>
@@ -126,25 +120,25 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
           <div className="relative w-64 h-64 flex items-center justify-center mb-6">
             {/* Outer Guide Circle */}
             <div className="absolute w-48 h-48 border-2 border-gray-300 rounded-full opacity-30"></div>
-            
+
             {/* Breathing Circle */}
             <motion.div
               animate={{
                 scale: currentPhase === 'inhale' || currentPhase === 'hold1' ? 1.2 : 0.8,
               }}
               transition={{
-                duration: currentPhase === 'inhale' ? breathingPattern.inhale : 
+                duration: currentPhase === 'inhale' ? breathingPattern.inhale :
                          currentPhase === 'exhale' ? breathingPattern.exhale : 0.5,
                 ease: "easeInOut"
               }}
               className={`w-32 h-32 rounded-full bg-gradient-to-br ${getCircleColor()} shadow-2xl flex items-center justify-center`}
             >
               <motion.div
-                animate={{ 
+                animate={{
                   opacity: isActive ? [0.7, 1, 0.7] : 0.7
                 }}
-                transition={{ 
-                  repeat: Infinity, 
+                transition={{
+                  repeat: Infinity,
                   duration: 2,
                   ease: "easeInOut"
                 }}
@@ -159,24 +153,24 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
             {isActive && (
               <>
                 <motion.div
-                  animate={{ 
+                  animate={{
                     scale: [1, 1.5, 1],
                     opacity: [0.3, 0, 0.3]
                   }}
-                  transition={{ 
-                    repeat: Infinity, 
+                  transition={{
+                    repeat: Infinity,
                     duration: 3,
                     ease: "easeOut"
                   }}
                   className="absolute w-32 h-32 rounded-full border-2 border-primary"
                 />
                 <motion.div
-                  animate={{ 
+                  animate={{
                     scale: [1, 1.8, 1],
                     opacity: [0.2, 0, 0.2]
                   }}
-                  transition={{ 
-                    repeat: Infinity, 
+                  transition={{
+                    repeat: Infinity,
                     duration: 3,
                     delay: 0.5,
                     ease: "easeOut"
@@ -205,13 +199,11 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
 
         {/* Controls */}
         <div className="flex justify-center mb-6">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+          <Button
             onClick={toggleBreathing}
             className={`px-8 py-4 rounded-full font-semibold shadow-lg transition-all duration-200 ${
-              isActive 
-                ? 'bg-red-500 hover:bg-red-600 text-white' 
+              isActive
+                ? 'bg-red-500 hover:bg-red-600 text-white'
                 : 'bg-gradient-to-r from-primary to-secondary text-white hover:shadow-xl'
             }`}
           >
@@ -219,7 +211,7 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
               <ApperIcon name={isActive ? "Pause" : "Play"} size={20} />
               <span>{isActive ? 'Pause' : 'Start Breathing'}</span>
             </div>
-          </motion.button>
+          </Button>
         </div>
 
         {/* Progress Stats */}
@@ -261,9 +253,7 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
             animate={{ opacity: 1, y: 0 }}
             className="mt-6"
           >
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+            <Button
               onClick={onComplete}
               className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200"
             >
@@ -271,7 +261,7 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
                 <ApperIcon name="CheckCircle" size={20} />
                 <span>Breathing Session Complete!</span>
               </div>
-            </motion.button>
+            </Button>
           </motion.div>
         )}
       </motion.div>
@@ -279,4 +269,4 @@ const BreathingVisualizer = ({ session, onComplete, onBack }) => {
   );
 };
 
-export default BreathingVisualizer;
+export default BreathingVisualizerDisplay;
