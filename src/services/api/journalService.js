@@ -19,8 +19,9 @@ export const create = async (journalEntry) => {
   await delay(400);
   const newEntry = {
     ...journalEntry,
-    id: Date.now().toString(),
-    createdAt: new Date().toISOString()
+    id: journalEntry.id || Date.now().toString(),
+    createdAt: journalEntry.createdAt || new Date().toISOString(),
+    analysisId: null // Will be updated after analysis is generated
   };
   entries.unshift(newEntry);
   return { ...newEntry };
