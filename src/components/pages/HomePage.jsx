@@ -46,11 +46,22 @@ const HomePage = () => {
     }
   };
 
-  const getGreeting = () => {
+const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return 'Good morning';
     if (hour < 17) return 'Good afternoon';
     return 'Good evening';
+  };
+
+  const getCurrentDate = () => {
+    const today = new Date();
+    const options = { 
+      weekday: 'long', 
+      year: 'numeric', 
+      month: 'long', 
+      day: 'numeric' 
+    };
+    return today.toLocaleDateString('en-US', options);
   };
 
   const getMoodEmoji = (score) => {
@@ -68,10 +79,10 @@ const HomePage = () => {
   return (
     <div className="h-full overflow-y-auto bg-gradient-to-br from-primary/5 via-white to-secondary/5">
       <div className="p-6 pb-0">
-        <PageHeader
+<PageHeader
           emoji="✨" // This emoji is part of the greeting, not the header emoji
           title={`${getGreeting()}! ✨`}
-          subtitle="How are you feeling today?"
+          subtitle={`${getCurrentDate()} • How are you feeling today?`}
           className="text-center mb-6"
           hideEmoji={true} // Custom prop to not render emoji for this specific header
         />
